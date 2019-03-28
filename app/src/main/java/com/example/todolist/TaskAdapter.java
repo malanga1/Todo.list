@@ -2,6 +2,7 @@ package com.example.todolist;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
     public void updateAdapterData(List<Task> list){
         mTaskList = list;
+        notifyDataSetChanged();
     }
 
     //Этот метод создает новый объект ViewHolder всякий раз, когда RecyclerView нуждается в этом.
@@ -39,10 +41,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         Task task = mTaskList.get(position);
         //Забираем из TaskViewHolder TextView и устанавливаем туда данные из задания.
         taskViewHolder.getUserText().setText(task.getText());
+        //Передаём уникальный айди задания, через setTag.
+        taskViewHolder.getItemBackground().setTag(task.getId());
     }
     //Возвращает количество элементов.
     @Override
     public int getItemCount() {
         return mTaskList.size();
     }
+
 }

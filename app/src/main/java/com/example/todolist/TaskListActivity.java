@@ -5,15 +5,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import java.util.UUID;
 
 public class TaskListActivity extends AppCompatActivity {
 
     //Ссылка на RecyclerView.
     RecyclerView mRecyclerView;
+    //Ссылка на Адаптер.
     TaskAdapter mTaskAdapter;
+
+    UUID id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +38,11 @@ public class TaskListActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mTaskAdapter);
     }
 
+    //Обновляем данные в адаптере, по возращению в основную активность.
     @Override
     protected void onResume() {
         super.onResume();
         mTaskAdapter.updateAdapterData(TaskLab.get(this).getTaskList());
-        mTaskAdapter.notifyDataSetChanged();
     }
 
     //Метод, с помощью которого создаётся контекстное меню.
@@ -45,6 +53,7 @@ public class TaskListActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.main_activity_menu, menu);
         return true;
     }
+
     //Вызывается при нажатии одного из элементов меню.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -54,8 +63,22 @@ public class TaskListActivity extends AppCompatActivity {
             case R.id.icon_add:
                 startActivity(new Intent(this, AddTaskActivity.class));
                 return true;
+            case R.id.item_delete_all:
+                TaskLab.get(this).deleteAll();
+                mTaskAdapter.updateAdapterData(TaskLab.get(this).getTaskList());
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    //Метод, который вызывается при нажатии на элемент списка.
+    public void onItemClick(View view) {
+        //Получаем айди задания, к которому относится данный элемент списка.
+        UUID id = (UUID) view.getTag();
+        Task task = TaskLab.get(this).getTask(id);
+        Toast.makeText(this, "Hello" + task.getText(), Toast.LENGTH_SHORT).show();
+    }
+
+
 }

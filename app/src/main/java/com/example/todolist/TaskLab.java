@@ -38,6 +38,20 @@ public class TaskLab {
         return sTaskLab;
     }
 
+    //Получаем определенное задание по UUID.
+    public Task getTask(UUID id){
+        Cursor cursor = mSQLiteDatabase.query(DBSchema.TaskTable.NAME,
+                null,
+                DBSchema.TaskTable.Collums.UUID + "=?",
+                new String[]{id.toString()},
+                null,
+                null,
+                null,
+                null
+        );
+        return getTaskFromCursor(cursor);
+    }
+
     //Возвращает список заданий.
     public List<Task> getTaskList() {
         //Получаем обьект Cursor со всеми строками таблицы.
@@ -51,7 +65,7 @@ public class TaskLab {
         );
         return getAllFromCursor(cursor);
     }
-
+    //Возвращает конкретный экземпляр задания.
     public void addTask(Task task){
         //Получаем ContentValues из Task для вставки в БД.
         ContentValues contentValues = getContentValues(task);
@@ -59,9 +73,20 @@ public class TaskLab {
         mSQLiteDatabase.insert(DBSchema.TaskTable.NAME, null, contentValues);
     }
 
+    //Метод, с помощью которого удаляем абсолютно все задания.
+    public void deleteAll(){
+        mSQLiteDatabase.delete(DBSchema.TaskTable.NAME, null, null);
+    }
+
+    //Удаляется определенное задание по UUID.
+    public void deleteTask(UUID id){
+        mSQLiteDatabase.delete(DBSchema.TaskTable.NAME, DBSchema.TaskTable.Collums.UUID + "=?", new String[]{id.toString()});
+    }
+
+
 
     private void initiateList(){
-        for(int i = 0; i<100; i++){
+        for(int i = 0; i<5; i++){
             Task task = new Task();
             task.setText("User added new text, so it's task#"+ i);
             addTask(task);
@@ -77,9 +102,6 @@ public class TaskLab {
         contentValues.put(DBSchema.TaskTable.Collums.TEXT, task.getText());
         return contentValues;
     }
-
-
-
 
     //Вспомогательный метод, преобразует данные из Cursor в список из заданий.
     private List<Task> getAllFromCursor(Cursor cursor){
