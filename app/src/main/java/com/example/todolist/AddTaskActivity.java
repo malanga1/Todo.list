@@ -27,7 +27,7 @@ public class AddTaskActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Task task = new Task();
                 task.setText(mTaskTextEditText.getText().toString());
-                TaskLab taskLab = TaskLab.get();
+                TaskLab taskLab = TaskLab.get(AddTaskActivity.this);
                 taskLab.addTask(task);
                 finish();
             }

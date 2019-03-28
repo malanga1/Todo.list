@@ -25,7 +25,7 @@ public class TaskListActivity extends AppCompatActivity {
         //Этот класс отвечает за работу с адаптером, именно он решает, переиспользовать View или создать новый.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //Определяем адаптер, передавая ему список заданий из хранилища.
-        mTaskAdapter = new TaskAdapter(TaskLab.get().getTaskList());
+        mTaskAdapter = new TaskAdapter(TaskLab.get(this).getTaskList());
         //Устанавливаем адаптер.
         mRecyclerView.setAdapter(mTaskAdapter);
     }
@@ -33,7 +33,7 @@ public class TaskListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mTaskAdapter.updateAdapterData(TaskLab.get().getTaskList());
+        mTaskAdapter.updateAdapterData(TaskLab.get(this).getTaskList());
         mTaskAdapter.notifyDataSetChanged();
     }
 
