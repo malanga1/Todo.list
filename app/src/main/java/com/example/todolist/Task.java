@@ -1,5 +1,6 @@
 package com.example.todolist;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Task {
@@ -26,5 +27,19 @@ public class Task {
     //Метод, для получения уникального идентификатора задания.
     public UUID getId() {
         return mId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(mText, task.mText) &&
+                Objects.equals(mId, task.mId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mText, mId);
     }
 }

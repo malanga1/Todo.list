@@ -28,7 +28,7 @@ public class TaskLab {
         //Получаем экземпляр базы данных через помошника.
         mSQLiteDatabase = new DataBaseHelper(context)
                 .getWritableDatabase();
-        initiateList();
+
     }
 
     //Метод, с помощью которого можно получить экземпляр хранилища.

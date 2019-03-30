@@ -1,5 +1,6 @@
 package com.example.todolist;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +22,6 @@ public class TaskListActivity extends AppCompatActivity {
     //Ссылка на Адаптер.
     TaskAdapter mTaskAdapter;
 
-    UUID id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +33,10 @@ public class TaskListActivity extends AppCompatActivity {
         //Этот класс отвечает за работу с адаптером, именно он решает, переиспользовать View или создать новый.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //Определяем адаптер, передавая ему список заданий из хранилища.
-        mTaskAdapter = new TaskAdapter(TaskLab.get(this).getTaskList());
+        mTaskAdapter = new TaskAdapter(TaskLab.get(this).getTaskList(), this);
         //Устанавливаем адаптер.
         mRecyclerView.setAdapter(mTaskAdapter);
+
     }
 
     //Обновляем данные в адаптере, по возращению в основную активность.
