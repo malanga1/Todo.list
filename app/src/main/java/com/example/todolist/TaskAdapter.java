@@ -1,12 +1,14 @@
 package com.example.todolist;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -58,6 +60,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         return mTaskList.size();
     }
 
+
+
+
     //Класс, который содерэит в себе все компоненты разметки элемента списка, через него мы и получаем ссылки на них.
      class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
@@ -67,7 +72,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         private TextView userText;
 
         //Корневой элемент разметки, который мы прослушиваем на нажатия.
-        private LinearLayout itemBackground;
+        private ConstraintLayout itemBackground;
+
+        //CheckBox, показывающий, сделано ли задание.
+        private CheckBox isDoneCheckBox;
 
 
         //Конструктор, котороый создает TaskViewHolder.
@@ -76,6 +84,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             //Связываем с элементром из разметки.
             userText = itemView.findViewById(R.id.edit_task_text);
             itemBackground = itemView.findViewById(R.id.linear_layout);
+            isDoneCheckBox = itemView.findViewById(R.id.is_done_check_box);
             mContext = context;
             itemView.setOnCreateContextMenuListener(this);
         }
@@ -86,9 +95,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         }
 
         //Возвращает корневой элемент.
-        public LinearLayout getItemBackground() {
+        public ConstraintLayout getItemBackground() {
             return itemBackground;
         }
+
+        //Возвращает CheckBox.
+        public CheckBox getIsDoneCheckBox(){ return isDoneCheckBox;}
 
         //Создаётся всплывающее меню при долгом нажатии.
         @Override

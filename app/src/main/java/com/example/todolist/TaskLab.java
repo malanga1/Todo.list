@@ -28,7 +28,7 @@ public class TaskLab {
         //Получаем экземпляр базы данных через помошника.
         mSQLiteDatabase = new DataBaseHelper(context)
                 .getWritableDatabase();
-
+        initiateList();
     }
 
     //Метод, с помощью которого можно получить экземпляр хранилища.
@@ -94,7 +94,7 @@ public class TaskLab {
 
 
     private void initiateList(){
-        for(int i = 0; i<5; i++){
+        for(int i = 0; i<20; i++){
             Task task = new Task();
             task.setText("User added new text, so it's task#"+ i);
             addTask(task);
