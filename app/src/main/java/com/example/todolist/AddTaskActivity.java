@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class AddTaskActivity extends AppCompatActivity {
 
@@ -18,18 +19,29 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
         //Связываем EditText.
-        mTaskTextEditText = findViewById(R.id.task_text);
+        mTaskTextEditText = findViewById(R.id.edit_task_text);
         //Связываем Button.
         mAddButton = findViewById(R.id.create_task_button);
         //Настраиваем OnClickListener для кнопки.
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Task task = new Task();
-                task.setText(mTaskTextEditText.getText().toString());
-                TaskLab taskLab = TaskLab.get(AddTaskActivity.this);
-                taskLab.addTask(task);
-                finish();
+                //Получаем тект из EditText.
+                String text = mTaskTextEditText.getText().toString().trim();
+                //Если поле не пустое, добавляем новое задание.
+                if(!text.equals("")) {
+                    //Создаем новое задание и ставим текст, который указал пользователь.
+                    Task task = new Task();
+                    task.setText(text);
+                    //Получаем экземпляр хранилища и добавляем в БД новое задание.
+                    TaskLab taskLab = TaskLab.get(AddTaskActivity.this);
+                    taskLab.addTask(task);
+                    //Завершаем активность.
+                    finish();
+                    //В противном случае поле пустое, предупреждаем пользователя.
+                } else {
+                    Toast.makeText(AddTaskActivity.this, "Task text cannot be empty!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

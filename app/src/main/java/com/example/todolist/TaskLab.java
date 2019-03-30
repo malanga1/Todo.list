@@ -73,6 +73,14 @@ public class TaskLab {
         mSQLiteDatabase.insert(DBSchema.TaskTable.NAME, null, contentValues);
     }
 
+    //
+    public void updateTask(Task task){
+        //Получаем ContentValues из Task для вставки в БД.
+        ContentValues contentValues = getContentValues(task);
+        //
+        mSQLiteDatabase.update(DBSchema.TaskTable.NAME, contentValues, DBSchema.TaskTable.Collums.UUID + "=?", new String[]{task.getId().toString()});
+    }
+
     //Метод, с помощью которого удаляем абсолютно все задания.
     public void deleteAll(){
         mSQLiteDatabase.delete(DBSchema.TaskTable.NAME, null, null);

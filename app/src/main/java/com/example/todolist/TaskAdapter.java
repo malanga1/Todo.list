@@ -1,14 +1,12 @@
 package com.example.todolist;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -60,17 +58,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         return mTaskList.size();
     }
 
-
-
-
-
-
-
-
-
-
-
-
     //Класс, который содерэит в себе все компоненты разметки элемента списка, через него мы и получаем ссылки на них.
      class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
@@ -81,13 +68,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         //Корневой элемент разметки, который мы прослушиваем на нажатия.
         private LinearLayout itemBackground;
-       
+
 
         //Конструктор, котороый создает TaskViewHolder.
         public TaskViewHolder( View itemView, Context context) {
             super(itemView);
             //Связываем с элементром из разметки.
-            userText = itemView.findViewById(R.id.task_text);
+            userText = itemView.findViewById(R.id.edit_task_text);
             itemBackground = itemView.findViewById(R.id.linear_layout);
             mContext = context;
             itemView.setOnCreateContextMenuListener(this);

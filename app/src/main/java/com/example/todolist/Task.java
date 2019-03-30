@@ -1,9 +1,10 @@
 package com.example.todolist;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Task {
+public class Task implements Serializable {
     //Поле, хранящее текст пользователя.
     private String mText;
     //Поле, хранящее уникальный идентификатор задания.

@@ -77,8 +77,15 @@ public class TaskListActivity extends AppCompatActivity {
     public void onItemClick(View view) {
         //Получаем айди задания, к которому относится данный элемент списка.
         UUID id = (UUID) view.getTag();
+        //Получаем конкретное задание по Айди.
         Task task = TaskLab.get(this).getTask(id);
-        Toast.makeText(this, "Hello" + task.getText(), Toast.LENGTH_SHORT).show();
+        //Создаём Intent для запуска EditTaskActivity.
+        Intent intent = new Intent(TaskListActivity.this, EditTaskActivity.class);
+        //Кладем дополнительную информацию в виде задания, которое нужно отредактировать.
+        intent.putExtra("task", task);
+        //Запускаем EditTaskActivity.
+        startActivity(intent);
+
     }
 
 
