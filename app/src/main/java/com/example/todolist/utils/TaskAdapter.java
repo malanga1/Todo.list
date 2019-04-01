@@ -1,4 +1,4 @@
-package com.example.todolist;
+package com.example.todolist.utils;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -13,7 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.example.todolist.R;
 
 import java.util.List;
 import java.util.UUID;

@@ -7,6 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.todolist.utils.Task;
+import com.example.todolist.utils.TaskLab;
+
 public class AddTaskActivity extends AppCompatActivity {
 
     //Поле, хранит EditText с основным текстом задачи.
