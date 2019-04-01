@@ -9,7 +9,8 @@
     android:clickable="true"
     android:focusable="true"
     android:onClick="onItemClick"
-    android:padding="8dp">
+    android:padding="8dp"
+    >
 
     <TextView
         android:id="@+id/edit_task_text"

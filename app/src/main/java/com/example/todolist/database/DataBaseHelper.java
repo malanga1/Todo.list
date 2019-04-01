@@ -22,7 +22,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TaskTable.NAME + "(" + " _id integer primary key autoincrement, " +
                 TaskTable.Collums.UUID + ", " +
-                TaskTable.Collums.TEXT + ")"
+                TaskTable.Collums.TEXT + ", " +
+                TaskTable.Collums.IS_DONE + ")"
         );
     }
 

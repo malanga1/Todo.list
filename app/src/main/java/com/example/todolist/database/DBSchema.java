@@ -7,6 +7,7 @@ public class DBSchema {
         public static final class Collums {
             public static final String UUID = "uuid";
             public static final String TEXT = "text";
+            public static final String IS_DONE = "isdone";
         }
     }
 }

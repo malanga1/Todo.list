@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -9,8 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,14 +47,51 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     //Этот метод принимает объект ViewHolder и устанавливает необходимые данные для соответствующей строки во view-компоненте.
     @Override
-    public void onBindViewHolder(TaskViewHolder taskViewHolder, int position) {
+    public void onBindViewHolder(final TaskViewHolder taskViewHolder,  int position) {
         //Получаем экземпляр задания для установки данных.
-        Task task = mTaskList.get(position);
+        final Task task = mTaskList.get(position);
         //Забираем из TaskViewHolder TextView и устанавливаем туда данные из задания.
-        taskViewHolder.getUserText().setText(task.getText());
+        final TextView taskText = taskViewHolder.getUserText();
+        taskText.setText(task.getText());
         //Передаём уникальный айди задания, через setTag.
         taskViewHolder.getItemBackground().setTag(task.getId());
-
+        //Забираем из TaskViewHolder CheckBox.
+        CheckBox isDoneBox = taskViewHolder.getIsDoneCheckBox();
+        isDoneBox.setOnCheckedChangeListener(null);
+        //Если на задани стоит флаг выполнения, отмечаем CheckBox.
+        if(task.isDone()){
+            isDoneBox.setChecked(true);
+            //Делаем текст зачеркнутым.
+            taskText.setPaintFlags(taskText.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+        //В проивном случае нужно бязательно установить false. чтобы при переиспользовании он не оставался true.
+        else {
+            isDoneBox.setChecked(false);
+            //Удаляем зачеркивание текста.
+            taskText.setPaintFlags(taskText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
+        //Устанавливаем слушателя изменения состояния CheckBox.
+        isDoneBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    //Делаем текст зачеркнутым.
+                    taskText.setPaintFlags(taskText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    //Помечаем задание как сделанное, и обновляем его в БД.
+                    task.setDone(true);
+                    TaskLab.get(mContext).updateTask(task);
+                    notifyItemChanged(taskViewHolder.getAdapterPosition());
+                }
+                else {
+                    //Удаляем зачеркиване текста.
+                    taskText.setPaintFlags(taskText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    //Помеячаем задание как не сделанное и обновляем его в БД.
+                    task.setDone(false);
+                    TaskLab.get(mContext).updateTask(task);
+                    notifyItemChanged(taskViewHolder.getAdapterPosition());
+                }
+            }
+        });
     }
 
     //Возвращает количество элементов.
@@ -128,7 +168,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             });
 
         }
-
     }
 
 }
