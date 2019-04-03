@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +23,8 @@ public class TaskListActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     //Ссылка на Адаптер.
     TaskAdapter mTaskAdapter;
+
+    final static String TAG = TaskListActivity.class.getName();
 
 
     @Override
@@ -67,6 +70,11 @@ public class TaskListActivity extends AppCompatActivity {
                 return true;
             case R.id.item_delete_all:
                 TaskLab.get(this).deleteAll();
+                mTaskAdapter.updateAdapterData(TaskLab.get(this).getTaskList());
+                return true;
+            case R.id.icon_delete_done:
+
+                TaskLab.get(this).deleteDoneTasks();
                 mTaskAdapter.updateAdapterData(TaskLab.get(this).getTaskList());
                 return true;
             default:

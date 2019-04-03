@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.todolist.database.DBSchema;
 import com.example.todolist.database.DataBaseHelper;
@@ -21,6 +22,8 @@ public class TaskLab {
 
     //Обьект базы данных.
     private SQLiteDatabase mSQLiteDatabase;
+
+    final static String TAG = TaskLab.class.getName();
 
 
     //Приватный конструктор, в котором инициализируется список заданий.
@@ -91,6 +94,11 @@ public class TaskLab {
         mSQLiteDatabase.delete(DBSchema.TaskTable.NAME, DBSchema.TaskTable.Collums.UUID + "=?", new String[]{id.toString()});
     }
 
+    public void deleteDoneTasks(){
+        mSQLiteDatabase.delete(DBSchema.TaskTable.NAME, DBSchema.TaskTable.Collums.IS_DONE+ "=?", new String[]{"1"});
+
+    }
+
 
 
     private void initiateList(){
@@ -109,7 +117,7 @@ public class TaskLab {
         contentValues.put(DBSchema.TaskTable.Collums.UUID, task.getId().toString());
         contentValues.put(DBSchema.TaskTable.Collums.TEXT, task.getText());
         contentValues.put(DBSchema.TaskTable.Collums.ADD_TEXT, task.getAdditionalText());
-        contentValues.put(DBSchema.TaskTable.Collums.IS_DONE, task.isDone()? 1:0);
+        contentValues.put(DBSchema.TaskTable.Collums.IS_DONE, task.isDone()? "1":"0");
         return contentValues;
     }
 
