@@ -15,9 +15,8 @@
     <TextView
         android:id="@+id/edit_task_text"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:gravity="center"
         android:text="Task"
         android:textColor="#000000"
         android:textSize="16sp"
@@ -29,8 +28,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
+        android:focusable="true"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/additional_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_task_text" />
 
 </android.support.constraint.ConstraintLayout>

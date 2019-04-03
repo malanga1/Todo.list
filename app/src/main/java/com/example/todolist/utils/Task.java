@@ -8,6 +8,8 @@ public class Task implements Serializable {
 
     //Поле, хранящее текст пользователя.
     private String mText;
+    //Поле, хранящее дополнительный текст.
+    private String mAdditionalText;
     //Поле, хранящее уникальный идентификатор задания.
     private UUID mId;
     //Поле, которое показывает, сделано ли задание.
@@ -46,6 +48,16 @@ public class Task implements Serializable {
     //Устанавливаем, сделано ли задание.
     public void setDone(boolean done) {
         isDone = done;
+    }
+
+    //Метод для получения дополнительного текста.
+    public String getAdditionalText() {
+        return mAdditionalText;
+    }
+
+    //Метод, для установки дополнительного текста.
+    public void setAdditionalText(String additionalText) {
+        mAdditionalText = additionalText;
     }
 
     @Override

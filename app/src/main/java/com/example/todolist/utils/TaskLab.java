@@ -28,7 +28,7 @@ public class TaskLab {
         //Получаем экземпляр базы данных через помошника.
         mSQLiteDatabase = new DataBaseHelper(context)
                 .getWritableDatabase();
-       initiateList();
+       //initiateList();
     }
 
     //Метод, с помощью которого можно получить экземпляр хранилища.
@@ -108,6 +108,7 @@ public class TaskLab {
         //Заполнение значениями: Key - имя столбца, Value - значение, которое нужно добавить в этот столбец.
         contentValues.put(DBSchema.TaskTable.Collums.UUID, task.getId().toString());
         contentValues.put(DBSchema.TaskTable.Collums.TEXT, task.getText());
+        contentValues.put(DBSchema.TaskTable.Collums.ADD_TEXT, task.getAdditionalText());
         contentValues.put(DBSchema.TaskTable.Collums.IS_DONE, task.isDone()? 1:0);
         return contentValues;
     }
@@ -124,11 +125,15 @@ public class TaskLab {
             String uuidStr = cursor.getString(cursor.getColumnIndex(DBSchema.TaskTable.Collums.UUID));
             //Извлекаем текст.
             String userText = cursor.getString(cursor.getColumnIndex(DBSchema.TaskTable.Collums.TEXT));
+            String addText = cursor.getString(cursor.getColumnIndex(DBSchema.TaskTable.Collums.ADD_TEXT));
             //Извлекаем готовность задания.
             boolean isDone = cursor.getInt(cursor.getColumnIndex(DBSchema.TaskTable.Collums.IS_DONE)) == 1;
             //Создаем задание с уже известным Айди.
             Task task = new Task(UUID.fromString(uuidStr));
             task.setText(userText);
+            if(!addText.equals("")){
+                task.setAdditionalText(addText);
+            } else task.setAdditionalText("");
             task.setDone(isDone);
             //Добавляем задание в список.
             list.add(task);
@@ -148,12 +153,16 @@ public class TaskLab {
         String uuidStr = cursor.getString(cursor.getColumnIndex(DBSchema.TaskTable.Collums.UUID));
         //Извлекаем текст.
         String userText = cursor.getString(cursor.getColumnIndex(DBSchema.TaskTable.Collums.TEXT));
+        String addText = cursor.getString(cursor.getColumnIndex(DBSchema.TaskTable.Collums.ADD_TEXT));
         //Извлекаем готовность задания.
         boolean isDone = cursor.getInt(cursor.getColumnIndex(DBSchema.TaskTable.Collums.IS_DONE)) == 1;
         //Создаем задание с уже известным Айди.
         Task task = new Task(UUID.fromString(uuidStr));
         task.setText(userText);
         task.setDone(isDone);
+        if(!addText.equals("")){
+            task.setAdditionalText(addText);
+        } else task.setAdditionalText("");
         //Закрываем курсор, освобождаем ресурсы.
         cursor.close();
         return task;

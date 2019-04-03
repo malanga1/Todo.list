@@ -52,7 +52,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         final Task task = mTaskList.get(position);
         //Забираем из TaskViewHolder TextView и устанавливаем туда данные из задания.
         final TextView taskText = taskViewHolder.getUserText();
+        final TextView additionalText = taskViewHolder.getAdditionalText();
         taskText.setText(task.getText());
+        //Проверка на дополнительный текст.
+        String addText = task.getAdditionalText();
+        //Если текст есть, показываем этот TextView и ставим туда текст, в противном случае убираем этот TextView.
+        if(!addText.equals("")){
+            additionalText.setVisibility(View.VISIBLE);
+            additionalText.setText(addText);
+        } else {
+            additionalText.setVisibility(View.GONE);
+        }
         //Передаём уникальный айди задания, через setTag.
         taskViewHolder.getItemBackground().setTag(task.getId());
         //Забираем из TaskViewHolder CheckBox.
@@ -63,12 +73,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             isDoneBox.setChecked(true);
             //Делаем текст зачеркнутым.
             taskText.setPaintFlags(taskText.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+            additionalText.setPaintFlags(additionalText.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
         }
         //В проивном случае нужно бязательно установить false. чтобы при переиспользовании он не оставался true.
         else {
             isDoneBox.setChecked(false);
             //Удаляем зачеркивание текста.
             taskText.setPaintFlags(taskText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            additionalText.setPaintFlags(additionalText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
         //Устанавливаем слушателя изменения состояния CheckBox.
         isDoneBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -77,6 +89,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 if (isChecked) {
                     //Делаем текст зачеркнутым.
                     taskText.setPaintFlags(taskText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    additionalText.setPaintFlags(additionalText.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
                     //Помечаем задание как сделанное, и обновляем его в БД.
                     task.setDone(true);
                     TaskLab.get(mContext).updateTask(task);
@@ -85,6 +98,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 else {
                     //Удаляем зачеркиване текста.
                     taskText.setPaintFlags(taskText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    additionalText.setPaintFlags(additionalText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     //Помеячаем задание как не сделанное и обновляем его в БД.
                     task.setDone(false);
                     TaskLab.get(mContext).updateTask(task);
@@ -111,6 +125,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         //Поле с основным текстом пользователя.
         private TextView userText;
 
+        //Поле с дополнительным текстом пользователя.
+        private TextView additionalText;
+
         //Корневой элемент разметки, который мы прослушиваем на нажатия.
         private ConstraintLayout itemBackground;
 
@@ -123,6 +140,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             super(itemView);
             //Связываем с элементром из разметки.
             userText = itemView.findViewById(R.id.edit_task_text);
+            additionalText = itemView.findViewById(R.id.additional_text);
             itemBackground = itemView.findViewById(R.id.linear_layout);
             isDoneCheckBox = itemView.findViewById(R.id.is_done_check_box);
             mContext = context;
@@ -141,6 +159,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         //Возвращает CheckBox.
         public CheckBox getIsDoneCheckBox(){ return isDoneCheckBox;}
+
+        //Возвращает TextView с дополнительным текстом пользователя.
+        public TextView getAdditionalText() {
+            return additionalText;
+        }
 
         //Создаётся всплывающее меню при долгом нажатии.
         @Override
