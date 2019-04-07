@@ -48,7 +48,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     //Этот метод принимает объект ViewHolder и устанавливает необходимые данные для соответствующей строки во view-компоненте.
     @Override
-    public void onBindViewHolder(final TaskViewHolder taskViewHolder,  int position) {
+    public void onBindViewHolder(final TaskViewHolder taskViewHolder, final int position) {
         //Получаем экземпляр задания для установки данных.
         final Task task = mTaskList.get(position);
         //Забираем из TaskViewHolder TextView и устанавливаем туда данные из задания.

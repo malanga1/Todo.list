@@ -66,6 +66,7 @@ public class TaskLab {
                 null,
                 null
         );
+
         return getAllFromCursor(cursor);
     }
     //Возвращает конкретный экземпляр задания.
