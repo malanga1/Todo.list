@@ -45,7 +45,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         //Получаем экземпляр строителя уведомлений.
         Notification.Builder builder = getBuilder(context, task.getText());
         //Отсылаем уведомление этим методом.
-        notificationManager.notify(1, builder.build());
+        notificationManager.notify(task.hashCode(), builder.build());
 
     }
 
