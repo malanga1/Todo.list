@@ -8,48 +8,72 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import com.example.todolist.R;
+
+import java.util.UUID;
+
 public class AlarmReceiver extends BroadcastReceiver {
+
+    private String NOTIFICATION_CHANNEL_ID = "1";
+    private String CHANNEL_NAME = "Alarm";
+    private NotificationManager mManager;
+
+    //Метод, который вызывается, когда прилетает Intent.
     @Override
     public void onReceive(Context context, Intent intent) {
-        Task task = (Task) intent.getSerializableExtra("task");
-        notify1(task, context);
+        //Получаем экземпляр хранилища, чтобы взять оттуда нужное задание.
+        TaskLab taskLab = TaskLab.get(context);
+        //Получаем конкретное задание из хранилища, используя ID, который был передан вместе с Intent.
+        Task task =  taskLab.getTask(UUID.fromString(intent.getStringExtra("task_ID")));
+        //Показываем уведомление этим методом.
+        showNotification(task, context);
     }
 
-    public void notify1(Task task, Context context){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    //Вспомогательный метод, в котором настраиваются и отсылаются уведомления.
+    private void showNotification(Task task, Context context){
+        //Получаем экземпляр NotificationManager (Управляет уведомлениями).
+        NotificationManager notificationManager = getManager(context);
+        //Если у пользователя стоит Андроид О или выше, обязательно нужно создать канал уведомлений.
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            //Создаем канал уведомлений. Устанавливаем ID, имя, и важность(Уведомление должно вспылвать - важность самая высокая).
             NotificationChannel channel = new NotificationChannel(
-                    "1",
-                    "Main",
+                    NOTIFICATION_CHANNEL_ID,
+                    CHANNEL_NAME,
                     NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("Main channel");
-
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-
-            Notification.Builder builder = new Notification.Builder(context, "1")
-                    .setContentTitle("Don't forget to..")
-                    .setContentText(task.getText())
-                    .setSmallIcon(android.R.drawable.stat_notify_more)
-                    .setAutoCancel(true);
-
-            notificationManager.notify(1, builder.build());
-
-        } else {
-
-            NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            Notification.Builder builder = new Notification.Builder(context)
-                    .setContentTitle("Don't forget to..")
-                    .setContentText(task.getText())
-                    .setPriority(Notification.PRIORITY_MAX)
-                    .setSmallIcon(android.R.drawable.stat_notify_more)
-                    .setAutoCancel(true);
-
-            notificationManager.notify(1, builder.build());
-
         }
-
+        //Получаем экземпляр строителя уведомлений.
+        Notification.Builder builder = getBuilder(context, task.getText());
+        //Отсылаем уведомление этим методом.
+        notificationManager.notify(1, builder.build());
 
     }
 
+    //Вспомогательный метод для построения уведомления.
+    private Notification.Builder getBuilder(Context context, String userText){
+        //Определяем строителя.
+        Notification.Builder builder;
+        //Если у пользователя Андроид О или выше, для инициализации пользуемся конструктором с указанием ID канала.
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            builder = new Notification.Builder(context, NOTIFICATION_CHANNEL_ID);
+        //Если версия ниже - жто не нужно.
+        } else {
+            builder = new Notification.Builder(context);
+        }
+        //Построение уведомления. Заголовок, текст, приоритет, иконкка.
+        builder.setContentTitle("Don't forget to...")
+                .setContentText(userText)
+                .setPriority(Notification.PRIORITY_MAX)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setAutoCancel(true);
+        return builder;
+    }
+
+    //Вспомогательный метод, который возвращает экземпляр NotificationManager.
+    private NotificationManager getManager(Context context) {
+        if (mManager == null) {
+            mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        return mManager;
+    }
 }

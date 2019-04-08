@@ -70,7 +70,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
                     //Проверяем Switch, и если он включен, то устанавливаем уведомление.
                     if(mNeedAlarmSwitch.isChecked()){
-                        setAlarm(new Task());
+                        setAlarm(task);
                     }
 
                     //Завершаем активность.
@@ -92,7 +92,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
         //Создаем Intent и передаём в него задание о котором нужно напомнить.
         Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putExtra("task", task);
+        intent.putExtra("task_ID", task.getId().toString());
         //Оборачиваем Intent в PendingIntent (обертка, которая позволяет стороннему приложению выполнять определенный код, в данный момент это AlarmReceiver).
         PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         //Получаем эекземпляр календаря.
@@ -101,64 +101,10 @@ public class AddTaskActivity extends AppCompatActivity {
         calendar.setTimeInMillis(System.currentTimeMillis());
         //Устанавливаем время, нужное нам(время, когда должно прийти оповещение).
         calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 50);
+        calendar.set(Calendar.MINUTE, 11);
         //Устанавливаем оповещение. В указанное премя по PendingIntent запустится AlarmReceiver.
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
     }
-
-
-
-
-
-
-
-
-
-    public void notify1(Task task){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    "1",
-                    "Main",
-                    NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("Main channel");
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-
-           Notification.Builder builder = new Notification.Builder(getApplicationContext(), "1")
-                    .setContentTitle("Don't forget to..")
-                    .setContentText(task.getText())
-                    .setSmallIcon(android.R.drawable.stat_notify_more)
-                    .setAutoCancel(true);
-
-           notificationManager.notify(1, builder.build());
-
-        } else {
-
-            NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-
-            Notification.Builder builder = new Notification.Builder(getApplicationContext())
-                    .setContentTitle("Don't forget to..")
-                    .setContentText(task.getText())
-                    .setPriority(Notification.PRIORITY_MAX)
-                    .setSmallIcon(android.R.drawable.stat_notify_more)
-                    .setAutoCancel(true);
-
-            notificationManager.notify(1, builder.build());
-
-        }
-
-
-    }
-
-
-    /*private NotificationManager getManager() {
-        if (mManager == null) {
-            mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        }
-        return mManager;*/
-
-
 
 
 
